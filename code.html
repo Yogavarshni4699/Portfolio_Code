@@ -814,24 +814,24 @@
             }
             
             .text-5xl {
-                font-size: 2.5rem;
-            }
-            
-            .text-7xl {
-                font-size: 3.5rem;
-            }
-            
-            .text-3xl {
                 font-size: 1.875rem;
             }
             
+            .text-7xl {
+                font-size: 1.25rem;
+            }
+            
+            .text-3xl {
+                font-size: 0.875rem;
+            }
+            
             .text-5xl, .text-7xl {
-                font-size: 2.5rem;
+                font-size: 1.875rem;
                 line-height: 1.2;
             }
             
             .text-4xl {
-                font-size: 2rem;
+                font-size: 1rem;
             }
             
             .text-2xl {
@@ -948,6 +948,12 @@
                 padding: 0.2rem 0.5rem !important;
                 margin-bottom: 0.25rem !important;
             }
+
+            /* Force smaller headings for main sections */
+            h2.text-5xl {
+                font-size: 1.875rem !important;
+            }
+
             
             .enhanced-social-btn {
                 width: 90px;
@@ -1089,7 +1095,7 @@
         
         @media (max-width: 480px) {
             .text-5xl, .text-7xl {
-                font-size: 2rem;
+                font-size: 1.875rem;
             }
             
             .enhanced-social-btn {
@@ -1593,7 +1599,7 @@
                                     {/* Category Header */}
                                     <div className="text-center mb-4 sm:mb-6">
                                         <div className="text-2xl sm:text-3xl mb-2">{category.icon}</div>
-                                        <h4 className="text-sm sm:text-lg font-bold text-white">{category.category}</h4>
+                                        <h4 className="text-xs sm:text-sm font-bold text-white">{category.category}</h4>
                                         <div className="h-px bg-gradient-to-r from-transparent via-white to-transparent mt-3 opacity-30"></div>
                                     </div>
                                     
@@ -1601,7 +1607,7 @@
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
                                         {category.skills.map((skill, i) => (
                                             <div key={i} className="flex items-center space-x-2 p-2 rounded-lg hover:bg-white hover:bg-opacity-10 transition-all duration-300 group">
-                                                <span className="text-sm sm:text-lg group-hover:scale-110 transition-transform duration-300">{skill.icon}</span>
+                                                <span className="text-xs sm:text-sm group-hover:scale-110 transition-transform duration-300">{skill.icon}</span>
                                                 <span className="text-xs sm:text-sm font-medium text-gray-300 group-hover:text-white transition-colors duration-300">{skill.name}</span>
                                             </div>
                                         ))}
@@ -2122,7 +2128,7 @@
                                                 <img
                                                     src={artwork.src}
                                                     alt={`Art ${index + 1}`}
-                                                    className="w-64 h-80 object-cover rounded-lg shadow-2xl border-2 border-white/20"
+                                                    className="w-40 h-48 object-cover rounded-lg shadow-2xl border-2 border-white/20"
                                                 />
                                             </div>
                                         );
