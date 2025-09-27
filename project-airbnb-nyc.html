@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airbnb NYC Analysis - Yogavarshni Ramachandran</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000000;
+            color: #ffffff;
+            overflow-x: hidden;
+            font-weight: 300;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #ffffff 0%, #cccccc 50%, #999999 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #ffffff 0%, #cccccc 100%);
+            color: #000000;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.2);
+        }
+        
+        .notion-tech-badge {
+            background: rgba(102, 126, 234, 0.15);
+            color: #a5b4fc;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+        
+        .notion-tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+        
+        .notion-tab-button {
+            background: rgba(255, 255, 255, 0.08);
+            border: none;
+            color: #8892b0;
+            padding: 12px 20px;
+            border-radius: 24px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .notion-tab-button.active {
+            background: rgba(102, 126, 234, 0.2);
+            color: #a5b4fc;
+            border-color: rgba(102, 126, 234, 0.4);
+        }
+        
+        nav {
+            backdrop-filter: blur(30px);
+            background: rgba(0, 0, 0, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .back-link { cursor: pointer; transition: all 0.3s ease; }
+        .back-link:hover { opacity: 0.8; }
+
+        .dashboard-image {
+            width: 100%;
+            border-radius: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        const { useState } = React;
+        
+        const ProjectPage = () => {
+            const [activeTab, setActiveTab] = useState('overview');
+            
+            const handleBackClick = (e) => {
+                e.preventDefault();
+                window.location.href = 'index.html';
+                setTimeout(() => {
+                    const projectsSection = document.getElementById('projects');
+                    if (projectsSection) {
+                        projectsSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }, 100);
+            };
+            
+            return (
+                <div className="min-h-screen bg-black">
+                    <nav className="fixed top-0 w-full z-50 transition-all duration-500 py-4">
+                        <div className="container mx-auto px-8 flex justify-between items-center">
+                            <a href="index.html#projects" onClick={handleBackClick} className="text-2xl font-black tracking-tight text-white hover:text-gray-300 transition-colors back-link">
+                                ← Yogavarshni
+                            </a>
+                            <a href="index.html#projects" onClick={handleBackClick} className="text-gray-400 hover:text-white transition-colors back-link">
+                                Back to Projects
+                            </a>
+                        </div>
+                    </nav>
+                    
+                    <div className="pt-24 pb-16">
+                        <div className="container mx-auto px-8 max-w-6xl">
+                            <div className="mb-12">
+                                <div className="flex items-center gap-4 mb-6">
+                                    <div className="text-6xl">📊</div>
+                                    <div>
+                                        <h1 className="text-4xl md:text-5xl font-black text-white mb-3">Airbnb Booking Analysis (Tableau)</h1>
+                                        <p className="text-xl text-gray-300">Business Intelligence & Data Visualization Dashboard</p>
+                                    </div>
+                                </div>
+                                
+                                <div className="flex flex-wrap gap-3 mb-8">
+                                    <span className="px-4 py-2 rounded-full text-sm font-medium bg-green-500/20 text-green-400">Done</span>
+                                    <span className="px-4 py-2 rounded-full text-sm font-medium bg-blue-500/20 text-blue-400">December 28, 2023</span>
+                                    <span className="px-4 py-2 rounded-full text-sm font-medium bg-purple-500/20 text-purple-400">Data Visualization & BI</span>
+                                </div>
+                                
+                                <div className="flex gap-4 mb-8 flex-wrap">
+                                    <a href="https://public.tableau.com/app/profile/yogavarshni.ramachandran/viz/AirbnbBookings2019/Dashboard1?publish=yes" target="_blank" rel="noopener noreferrer" className="btn-primary">📊 Tableau Dashboard</a>
+                                    <a href="https://www.notion.so/Airbnb-Booking-Analysis-Tableau-0f117a7926864f94bdf2393e9f73c953" target="_blank" rel="noopener noreferrer" className="btn-primary">Notion</a>
+                                    <a href="https://github.com/Yogavarshni4699/Airbnb-Booking-Analysis-Tableau-" target="_blank" rel="noopener noreferrer" className="btn-primary">GitHub</a>
+                                </div>
+                                
+                                <div className="notion-tabs">
+                                    <button className={`notion-tab-button ${activeTab === 'overview' ? 'active' : ''}`} onClick={() => setActiveTab('overview')}>📋 Overview</button>
+                                    <button className={`notion-tab-button ${activeTab === 'analysis' ? 'active' : ''}`} onClick={() => setActiveTab('analysis')}>📈 Analysis</button>
+                                    <button className={`notion-tab-button ${activeTab === 'insights' ? 'active' : ''}`} onClick={() => setActiveTab('insights')}>💡 Key Insights</button>
+                                    <button className={`notion-tab-button ${activeTab === 'conclusion' ? 'active' : ''}`} onClick={() => setActiveTab('conclusion')}>✅ Conclusion</button>
+                                </div>
+                            </div>
+                            
+                            <div className="min-h-96">
+                                {activeTab === 'overview' && (
+                                    <div>
+                                        <div className="mb-8">
+                                            <h3 className="text-2xl font-bold text-white mb-4 gradient-text">Introduction</h3>
+                                            <p className="text-gray-300 leading-relaxed mb-6">
+                                                This report provides an analytical overview of Airbnb activity in New York City, leveraging a data visualization dashboard. The aim is to glean insights into the performance of Airbnb listings across five boroughs: Manhattan, Brooklyn, Queens, the Bronx, and Staten Island. The data encompasses a variety of metrics, including total bookings, average prices, and total reviews, segmented by neighborhood groups and room types.
+                                            </p>
+                                        </div>
+
+                                        <div className="mb-8">
+                                            <h3 className="text-2xl font-bold text-white mb-4 gradient-text">Dashboard Preview</h3>
+                                            <img src="Images/airbnb-dashboard.png" alt="Airbnb NYC Dashboard" className="dashboard-image" />
+                                        </div>
+                                        
+                                        <div className="grid lg:grid-cols-2 gap-8">
+                                            <div>
+                                                <h3 className="text-2xl font-bold text-white mb-4 gradient-text">Business Use Case</h3>
+                                                <p className="text-gray-300 leading-relaxed">
+                                                    The business use case for this data involves multiple stakeholders in the hospitality and tourism industry, including Airbnb hosts, real estate investors, market analysts, and city planners. Understanding the distribution of bookings and pricing can help hosts price their listings competitively and maximize occupancy rates.
+                                                </p>
+                                            </div>
+                                            <div>
+                                                <h3 className="text-2xl font-bold text-white mb-4 gradient-text">Key Stakeholders</h3>
+                                                <ul className="space-y-2">
+                                                    <li className="text-gray-300 flex items-start"><span className="text-blue-400 mr-3 mt-1">•</span>Airbnb hosts for competitive pricing</li>
+                                                    <li className="text-gray-300 flex items-start"><span className="text-blue-400 mr-3 mt-1">•</span>Real estate investors for property investments</li>
+                                                    <li className="text-gray-300 flex items-start"><span className="text-blue-400 mr-3 mt-1">•</span>Market analysts for trend forecasting</li>
+                                                    <li className="text-gray-300 flex items-start"><span className="text-blue-400 mr-3 mt-1">•</span>City planners for housing impact analysis</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        
+                                        <div className="mt-8">
+                                            <h3 className="text-2xl font-bold text-white mb-4 gradient-text">Tools Used</h3>
+                                            <div className="flex flex-wrap gap-2">
+                                                {["Tableau", "Data Visualization", "Business Intelligence", "NYC Open Data", "Statistical Analysis"].map((tool, index) => (
+                                                    <span key={index} className="notion-tech-badge">{tool}</span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                                
+                                {activeTab === 'analysis' && (
+                                    <div>
+                                        <h3 className="text-2xl font-bold text-white mb-6 gradient-text">Detailed Analysis</h3>
+                                        <div className="space-y-6">
+                                            <div className="bg-gray-800/30 rounded-lg p-6">
+                                                <div className="text-xl font-bold text-white mb-3">1. Total Bookings by Neighborhood Group and Room Type</div>
+                                                <ul className="text-gray-300 space-y-2 ml-4">
+                                                    <li>• <strong>Manhattan</strong> dominates the market with the highest number of bookings, particularly for entire homes and apartments.</li>
+                                                    <li>• <strong>Brooklyn</strong> follows with substantial bookings, indicating a popular choice for Airbnb users.</li>
+                                                    <li>• <strong>Queens, Bronx, and Staten Island</strong> show fewer bookings, with the Bronx and Staten Island notably lagging in shared room bookings.</li>
+                                                </ul>
+                                            </div>
+
+                                            <div className="bg-gray-800/30 rounded-lg p-6">
+                                                <div className="text-xl font-bold text-white mb-3">2. Average Price by Neighborhood Group and Room Type</div>
+                                                <ul className="text-gray-300 space-y-2 ml-4">
+                                                    <li>• <strong>Manhattan</strong> listings are the most expensive, especially for entire homes/apartments.</li>
+                                                    <li>• <strong>Bronx</strong> listings are the most affordable, which could correlate with lower demand in this area.</li>
+                                                    <li>• <strong>Staten Island</strong> shows a higher average price for private rooms compared to other boroughs.</li>
+                                                </ul>
+                                            </div>
+
+                                            <div className="bg-gray-800/30 rounded-lg p-6">
+                                                <div className="text-xl font-bold text-white mb-3">3. Total Reviews by Year</div>
+                                                <ul className="text-gray-300 space-y-2 ml-4">
+                                                    <li>• A growth trend in reviews from 2011 to 2019 suggests increasing Airbnb usage.</li>
+                                                    <li>• The abrupt decline in 2020 could be attributed to external factors such as the COVID-19 pandemic, affecting travel and accommodation patterns.</li>
+                                                </ul>
+                                            </div>
+
+                                            <div className="bg-gray-800/30 rounded-lg p-6">
+                                                <div className="text-xl font-bold text-white mb-3">4. Average Price in the Neighborhoods - Room Type: All</div>
+                                                <ul className="text-gray-300 space-y-2 ml-4">
+                                                    <li>• The map shows a concentration of higher-priced listings in <strong>Manhattan</strong>.</li>
+                                                    <li>• Lower-priced listings are spread out, with some clustering in outer boroughs.</li>
+                                                </ul>
+                                            </div>
+
+                                            <div className="bg-gray-800/30 rounded-lg p-6">
+                                                <div className="text-xl font-bold text-white mb-3">5. Average Reviews per Month by Room Type</div>
+                                                <ul className="text-gray-300 space-y-2 ml-4">
+                                                    <li>• Entire homes/apartments across all boroughs receive the most reviews monthly, indicating higher occupancy or turnover.</li>
+                                                    <li>• <strong>Staten Island</strong> exhibits an unexpectedly high average for entire homes/apartments, suggesting a possible niche or an outlier in the data.</li>
+                                                </ul>
+                                            </div>
+
+                                            <div className="bg-gray-800/30 rounded-lg p-6">
+                                                <div className="text-xl font-bold text-white mb-3">6. Average Price by Neighborhood</div>
+                                                <ul className="text-gray-300 space-y-2 ml-4">
+                                                    <li>• <strong>Fort Wadsworth</strong> and areas like <strong>SoHo</strong> and <strong>Midtown</strong> command high average prices, indicating their desirability or premium offerings.</li>
+                                                    <li>• There is considerable variability within neighborhoods, highlighting the diverse range of offerings in the city.</li>
+                                                </ul>
+                                            </div>
+
+                                            <div className="bg-gray-800/30 rounded-lg p-6">
+                                                <div className="text-xl font-bold text-white mb-3">7. Total Reviews by Neighborhood</div>
+                                                <ul className="text-gray-300 space-y-2 ml-4">
+                                                    <li>• <strong>Manhattan</strong> garners the most reviews, indicative of its popularity and possibly higher visitor satisfaction.</li>
+                                                    <li>• Other boroughs hold smaller shares of the review count, correlating with fewer bookings.</li>
+                                                </ul>
+                                            </div>
+
+                                            <div className="bg-gray-800/30 rounded-lg p-6">
+                                                <div className="text-xl font-bold text-white mb-3">8. Total Bookings by Months and Neighborhood Groups</div>
+                                                <ul className="text-gray-300 space-y-2 ml-4">
+                                                    <li>• Seasonality affects bookings, with summer months seeing peak activity, reflecting tourist preferences and possibly better weather.</li>
+                                                </ul>
+                                            </div>
+
+                                            <div className="bg-gray-800/30 rounded-lg p-6">
+                                                <div className="text-xl font-bold text-white mb-3">9. Top 10 Hosts by Total Reviews</div>
+                                                <ul className="text-gray-300 space-y-2 ml-4">
+                                                    <li>• The hosts with the highest reviews are predominantly in <strong>Manhattan</strong> and <strong>Brooklyn</strong>, which may point to professional hosting or superior guest experiences.</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                                
+                                {activeTab === 'insights' && (
+                                    <div>
+                                        <h3 className="text-2xl font-bold text-white mb-6 gradient-text">Key Insights & Findings</h3>
+                                        <div className="space-y-6">
+                                            <div className="bg-gray-800/30 rounded-lg p-6">
+                                                <div className="text-xl font-bold text-white mb-3">Market Leaders</div>
+                                                <div className="text-gray-300">
+                                                    Manhattan and Brooklyn are the most active markets for Airbnb in NYC, with the highest number of bookings, reviews, and overall revenue potential due to higher average prices.
+                                                </div>
+                                            </div>
+
+                                            <div className="bg-gray-800/30 rounded-lg p-6">
+                                                <div className="text-xl font-bold text-white mb-3">Seasonal Patterns</div>
+                                                <div className="text-gray-300">
+                                                    There is a significant seasonal influence on bookings, with a peak in the summer months, suggesting the potential for dynamic pricing strategies to maximize revenue.
+                                                </div>
+                                            </div>
+
+                                            <div className="bg-gray-800/30 rounded-lg p-6">
+                                                <div className="text-xl font-bold text-white mb-3">Growth Opportunities</div>
+                                                <div className="text-gray-300">
+                                                    The lower activity in the Bronx and Staten Island presents an opportunity for Airbnb to expand its market presence in these areas through targeted promotions and incentives for hosts.
+                                                </div>
+                                            </div>
+
+                                            <div className="bg-gray-800/30 rounded-lg p-6">
+                                                <div className="text-xl font-bold text-white mb-3">Price Diversity</div>
+                                                <div className="text-gray-300">
+                                                    The disparity in average prices between neighborhoods indicates a diverse range of offerings, catering to different traveler budgets and preferences.
+                                                </div>
+                                            </div>
+
+                                            <div className="bg-gray-800/30 rounded-lg p-6">
+                                                <div className="text-xl font-bold text-white mb-3">Premium Locations</div>
+                                                <div className="text-gray-300">
+                                                    <strong>Fort Wadsworth</strong> and areas like <strong>SoHo</strong> and <strong>Midtown</strong> command high average prices, indicating their desirability or premium offerings.
+                                                </div>
+                                            </div>
+
+                                            <div className="bg-gray-800/30 rounded-lg p-6">
+                                                <div className="text-xl font-bold text-white mb-3">Top Hosts</div>
+                                                <div className="text-gray-300">
+                                                    The hosts with the highest reviews are predominantly in <strong>Manhattan</strong> and <strong>Brooklyn</strong>, which may point to professional hosting or superior guest experiences.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                                
+                                {activeTab === 'conclusion' && (
+                                    <div>
+                                        <div className="mb-8">
+                                            <h3 className="text-2xl font-bold text-white mb-4 gradient-text">Conclusion</h3>
+                                            <p className="text-gray-300 leading-relaxed mb-6">
+                                                The data indicates that Manhattan and Brooklyn are the most active markets for Airbnb in NYC, with the highest number of bookings, reviews, and overall revenue potential due to higher average prices. There is a significant seasonal influence on bookings, with a peak in the summer months, suggesting the potential for dynamic pricing strategies to maximize revenue.
+                                            </p>
+                                            <p className="text-gray-300 leading-relaxed mb-6">
+                                                The lower activity in the Bronx and Staten Island presents an opportunity for Airbnb to expand its market presence in these areas through targeted promotions and incentives for hosts. The disparity in average prices between neighborhoods indicates a diverse range of offerings, catering to different traveler budgets and preferences.
+                                            </p>
+                                            <p className="text-gray-300 leading-relaxed">
+                                                The decline in reviews in 2020 warrants further investigation to understand the long-term impacts of external factors on the short-term rental market. Hosts with high review counts could be studied for best practices to enhance guest experiences across the board.
+                                            </p>
+                                        </div>
+                                        
+                                        <div className="mb-8">
+                                            <h3 className="text-2xl font-bold text-white mb-4 gradient-text">Key Takeaways</h3>
+                                            <ul className="space-y-3">
+                                                <li className="text-gray-300 flex items-start">
+                                                    <span className="text-green-400 mr-3 mt-1">✓</span>
+                                                    Airbnb hosts and stakeholders can leverage this data to make informed decisions regarding property investments
+                                                </li>
+                                                <li className="text-gray-300 flex items-start">
+                                                    <span className="text-green-400 mr-3 mt-1">✓</span>
+                                                    Dynamic pricing strategies can maximize revenue based on seasonal patterns
+                                                </li>
+                                                <li className="text-gray-300 flex items-start">
+                                                    <span className="text-green-400 mr-3 mt-1">✓</span>
+                                                    Expansion opportunities exist in underserved boroughs like the Bronx and Staten Island
+                                                </li>
+                                                <li className="text-gray-300 flex items-start">
+                                                    <span className="text-green-400 mr-3 mt-1">✓</span>
+                                                    Market positioning strategies can capitalize on the vibrant NYC short-term rental market
+                                                </li>
+                                            </ul>
+                                        </div>
+
+                                        <div className="mb-8">
+                                            <h3 className="text-2xl font-bold text-white mb-4 gradient-text">Summary</h3>
+                                            <p className="text-gray-300 leading-relaxed">
+                                                <strong>In summary,</strong> Airbnb hosts and stakeholders can leverage this data to make informed decisions regarding property investments, operational strategies, and market positioning to capitalize on the vibrant NYC short-term rental market.
+                                            </p>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+        
+        ReactDOM.render(<ProjectPage />, document.getElementById('root'));
+    </script>
+</body>
+</html>

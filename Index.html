@@ -1793,6 +1793,17 @@
                     tools: ["Python", "LangChain", "ChromaDB", "Ollama", "llama3.2", "PyMuPDF", "ROUGE", "Jupyter"],
                     icon: "📚",
                     pageUrl: "project-rag-llm.html"
+                },
+                {
+                    id: 3,
+                    title: "Airbnb Booking Analysis (Tableau)",
+                    subtitle: "Conducted a detailed analysis of Airbnb activities in NYC using a data dashboard to aid various stakeholders in hospitality and real estate",
+                    category: "Data Visualization & BI",
+                    date: "December 28, 2023",
+                    status: "Done",
+                    tools: ["Tableau", "NYC Open Data", "Data Visualization", "Business Intelligence"],
+                    icon: "📊",
+                    pageUrl: "project-airbnb-nyc.html"
                 }
             ];
             
@@ -1806,7 +1817,7 @@
                     <div className="container mx-auto px-8">
                         <h2 className="text-5xl font-black text-center mb-20 gradient-text">FEATURED PROJECTS</h2>
                         
-                        <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto mb-8">
+                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto mb-8">
                             {projects.map((project, index) => (
                                 <div key={project.id} className="project-card glass-card overflow-hidden cursor-pointer" onClick={() => openProject(project)}>
                                     <div className="notion-project-cover">
