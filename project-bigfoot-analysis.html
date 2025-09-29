@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BigFoot Sighting Analysis (PowerBI) - Yogavarshni Ramachandran</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000000;
+            color: #ffffff;
+            overflow-x: hidden;
+            font-weight: 300;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #ffffff 0%, #cccccc 50%, #999999 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .status-done {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+        
+        .status-date {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        .status-category {
+            background: rgba(168, 85, 247, 0.2);
+            color: #a855f7;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+        
+        .resource-button {
+            background: #ffffff;
+            color: #000000;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 12px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 8px;
+        }
+        
+        .resource-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(255, 255, 255, 0.3);
+            background: #f0f0f0;
+        }
+        
+        .tab-button {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            margin: 6px;
+            cursor: pointer;
+        }
+        
+        .tab-button.active {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .tab-button:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .content-section {
+            display: none;
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        .dashboard-image {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 20px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .dashboard-image:hover {
+            transform: scale(1.02);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
+        }
+        
+        .insight-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .highlight-box {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .text-5xl {
+                font-size: 2rem;
+            }
+            
+            .resource-button {
+                display: block;
+                width: 100%;
+                margin: 8px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen py-8">
+        <!-- Top Navigation -->
+        <div class="container mx-auto px-4 sm:px-8 max-w-7xl mb-8">
+            <div class="flex justify-between items-center">
+                <a href="Index.html" class="flex items-center text-white text-xl font-black hover:text-gray-300 transition-colors">
+                    <span class="mr-2">←</span> Yogavarshni
+                </a>
+                <a href="Index.html#projects" class="text-gray-400 hover:text-white transition-colors text-sm">
+                    Back to Projects
+                </a>
+            </div>
+        </div>
+
+        <div class="container mx-auto px-4 sm:px-8 max-w-6xl">
+            <!-- Project Header -->
+            <div class="mb-8">
+                <div class="flex items-start gap-4 mb-4">
+                    <div class="text-6xl">🦶</div>
+                    <div>
+                        <h1 class="text-4xl sm:text-5xl font-black mb-2">BigFoot Sighting Analysis (PowerBI)</h1>
+                        <p class="text-lg text-gray-400">At what weather conditions do most BigFoot sightings occur? Made for DataDNA Dataset Challenge</p>
+                    </div>
+                </div>
+                
+                <!-- Status Badges -->
+                <div class="flex flex-wrap mt-6">
+                    <span class="status-badge status-done">Done</span>
+                    <span class="status-badge status-date">February 15, 2023</span>
+                    <span class="status-badge status-category">Data Visualization & BI</span>
+                </div>
+            </div>
+
+            <!-- Resource Buttons -->
+            <div class="flex flex-wrap mb-8">
+                <a href="https://app.powerbi.com/groups/me/reports/3145d23b-1080-45a8-892b-64c3575766e5/ReportSection" target="_blank" class="resource-button">
+                    📊 POWERBI DASHBOARD
+                </a>
+                <a href="https://www.notion.so/BigFoot-Sighting-Analysis-PowerBi-75c9ddadeae84e3687c34d97e7db5c7d" target="_blank" class="resource-button">
+                    📝 NOTION
+                </a>
+                <a href="https://github.com/Yogavarshni4699/PowerBi_Visualization" target="_blank" class="resource-button">
+                    💻 GITHUB
+                </a>
+                <a href="https://www.bfro.net" target="_blank" class="resource-button">
+                    🔍 BFRO DATA SOURCE
+                </a>
+            </div>
+
+            <!-- Tab Navigation -->
+            <div class="flex flex-wrap mb-12">
+                <button class="tab-button active" onclick="showTab('overview')">📊 Overview</button>
+                <button class="tab-button" onclick="showTab('analysis')">📈 Analysis</button>
+                <button class="tab-button" onclick="showTab('insights')">💡 Key Insights</button>
+                <button class="tab-button" onclick="showTab('conclusion')">✅ Conclusion</button>
+            </div>
+
+            <!-- Overview Section -->
+            <div id="overview" class="content-section active">
+                <h2 class="text-3xl font-bold mb-6">Introduction</h2>
+                <p class="text-gray-300 mb-6 leading-relaxed text-lg">
+                    BigFoot Sighting Analysis Using PowerBI - Fun project created for the DataDNA Dataset Challenge competition. This comprehensive analysis explores weather conditions, geographic patterns, and temporal trends of BigFoot sightings across the United States from 1921 to 2021.
+                </p>
+                
+                <div class="insight-box">
+                    <h3 class="text-xl font-semibold mb-4">🎯 Objective</h3>
+                    <p class="text-gray-300 leading-relaxed">
+                        At what weather conditions do most BigFoot sightings occur?
+                    </p>
+                </div>
+
+                <div class="insight-box">
+                    <h3 class="text-xl font-semibold mb-4">📊 About the Data</h3>
+                    <p class="text-gray-300 leading-relaxed mb-4">
+                        The Bigfoot Field Researchers Organization (BFRO) – <a href="https://www.bfro.net" target="_blank" class="text-blue-400 hover:underline">www.bfro.net</a> – is an organization dedicated to investigating the bigfoot/sasquatch mystery. This dataset contains sighting data publicly available on the BFRO website in a more digestible form.
+                    </p>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+                        <div class="text-center">
+                            <div class="text-3xl font-black text-white mb-2">5,021</div>
+                            <div class="text-xs text-gray-400 uppercase">Total Sightings</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-black text-white mb-2">1,036</div>
+                            <div class="text-xs text-gray-400 uppercase">Counties</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-black text-white mb-2">100</div>
+                            <div class="text-xs text-gray-400 uppercase">Years (1921-2021)</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-black text-white mb-2">49</div>
+                            <div class="text-xs text-gray-400 uppercase">US States</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insight-box">
+                    <h3 class="text-xl font-semibold mb-4">🏆 Competition Details</h3>
+                    <ul class="text-gray-300 space-y-2">
+                        <li><strong>Competition:</strong> DataDNA Dataset Challenge</li>
+                        <li><strong>Organizer:</strong> Pomerol Partners</li>
+                        <li><strong>Date:</strong> February 2023</li>
+                        <li><strong>Prize:</strong> $400 Amazon Voucher from sponsors Pomerol, Qlik, Astrato, & NovyPro</li>
+                    </ul>
+                </div>
+
+                <h3 class="text-2xl font-bold mb-4 mt-8">Dataset Used</h3>
+                <ol class="list-decimal list-inside text-gray-300 space-y-2 text-lg">
+                    <li>BigFoot sighting records from BFRO (1921-2021)</li>
+                    <li>Weather condition data (temperature, humidity, visibility, pressure, wind speed, cloud cover)</li>
+                    <li>Geographic data (state, county)</li>
+                    <li>Temporal data (year, month, season)</li>
+                </ol>
+
+                <h3 class="text-2xl font-bold mb-4 mt-8">🛠️ Technologies Used</h3>
+                <div class="flex flex-wrap gap-2">
+                    <span class="bg-blue-900/30 text-blue-300 px-4 py-2 rounded-full text-sm font-semibold border border-blue-700/50">PowerBI</span>
+                    <span class="bg-green-900/30 text-green-300 px-4 py-2 rounded-full text-sm font-semibold border border-green-700/50">Excel</span>
+                    <span class="bg-purple-900/30 text-purple-300 px-4 py-2 rounded-full text-sm font-semibold border border-purple-700/50">Data Cleaning</span>
+                    <span class="bg-orange-900/30 text-orange-300 px-4 py-2 rounded-full text-sm font-semibold border border-orange-700/50">Data Visualization</span>
+                    <span class="bg-pink-900/30 text-pink-300 px-4 py-2 rounded-full text-sm font-semibold border border-pink-700/50">Statistical Analysis</span>
+                    <span class="bg-cyan-900/30 text-cyan-300 px-4 py-2 rounded-full text-sm font-semibold border border-cyan-700/50">Weather Analytics</span>
+                    <span class="bg-yellow-900/30 text-yellow-300 px-4 py-2 rounded-full text-sm font-semibold border border-yellow-700/50">Geographic Analysis</span>
+                </div>
+            </div>
+
+            <!-- Analysis Section -->
+            <div id="analysis" class="content-section">
+                <h2 class="text-3xl font-bold mb-6">Dashboard Analysis</h2>
+                
+                <h3 class="text-2xl font-semibold mb-4">📊 Main Dashboard Overview</h3>
+                <img src="Images/bf0.png" alt="BigFoot Analysis Main Dashboard" class="dashboard-image">
+               
+                <img src="Images/bf1.png" alt="BigFoot Analysis Main Dashboard" class="dashboard-image">
+                <p class="text-gray-400 mb-8">
+                    Complete dashboard showing sighting trends by year, state distribution, seasonal patterns, and weather condition analysis. The visualization reveals that Washington state leads in sightings, with October showing peak monthly activity.
+                </p>
+
+                <h3 class="text-2xl font-semibold mb-4">🌤️ Weather Conditions Analysis</h3>
+                <img src="Images/bf2.png" alt="Weather Conditions Analysis" class="dashboard-image">
+                <p class="text-gray-400 mb-8">
+                    Detailed breakdown of weather patterns during BigFoot sightings, analyzing visibility, humidity, cloud cover, atmospheric pressure, dew point, and wind speed. The data shows clear preferences for specific weather conditions.
+                </p>
+
+                <h3 class="text-2xl font-semibold mb-4">🗺️ Geographic & Seasonal Patterns</h3>
+                <img src="Images/bf3.png" alt="Geographic and Seasonal Analysis" class="dashboard-image">
+                <p class="text-gray-400 mb-8">
+                    State-wise sighting distribution and seasonal analysis. Summer and Fall emerge as peak seasons, with August being the month with highest sightings when skies are typically clear.
+                </p>
+
+                <h3 class="text-2xl font-semibold mb-4">📈 Statistical Summary & Optimal Conditions</h3>
+                <img src="Images/bf4.png" alt="Statistical Summary Dashboard" class="dashboard-image">
+                <p class="text-gray-400 mb-8">
+                    Comprehensive statistical analysis showing average weather values and optimal conditions for sightings. The analysis identifies specific weather parameter ranges that correlate with higher sighting frequencies.
+                </p>
+            </div>
+
+            <!-- Key Insights Section -->
+            <div id="insights" class="content-section">
+                <h2 class="text-3xl font-bold mb-6">Key Insights</h2>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="insight-box">
+                        <h3 class="text-xl font-semibold mb-4">📍 Geographic Patterns</h3>
+                        <div class="highlight-box">
+                            <p class="text-white font-semibold mb-2">🥇 Top State: Washington</p>
+                            <p class="text-gray-300 text-sm">Washington leads with 601 sightings, followed by California (417), Oregon (303), Florida (345), and Ohio (302)</p>
+                        </div>
+                        <div class="highlight-box">
+                            <p class="text-white font-semibold mb-2">🗺️ Distribution Pattern</p>
+                            <p class="text-gray-300 text-sm">Sightings concentrated in Pacific Northwest and mountainous regions with dense forest coverage</p>
+                        </div>
+                    </div>
+
+                    <div class="insight-box">
+                        <h3 class="text-xl font-semibold mb-4">📅 Temporal Patterns</h3>
+                        <div class="highlight-box">
+                            <p class="text-white font-semibold mb-2">📆 Peak Period: 2004-2020</p>
+                            <p class="text-gray-300 text-sm">Highest concentration of sightings with peak year in 2004 showing dramatic increase</p>
+                        </div>
+                        <div class="highlight-box">
+                            <p class="text-white font-semibold mb-2">🍂 Seasonal Trend</p>
+                            <p class="text-gray-300 text-sm">Summer (32%) and Fall (33%) account for 65% of all sightings</p>
+                        </div>
+                        <div class="highlight-box">
+                            <p class="text-white font-semibold mb-2">📅 Monthly Peak: August & October</p>
+                            <p class="text-gray-300 text-sm">August shows highest monthly sightings, October also prominent</p>
+                        </div>
+                    </div>
+
+                    <div class="insight-box">
+                        <h3 class="text-xl font-semibold mb-4">🌡️ Optimal Weather Conditions</h3>
+                        <div class="space-y-3">
+                            <div class="highlight-box">
+                                <p class="text-white font-semibold mb-1">☀️ Visibility: High (10/10)</p>
+                                <p class="text-gray-300 text-sm">Clear skies throughout the day preferred</p>
+                            </div>
+                            <div class="highlight-box">
+                                <p class="text-white font-semibold mb-1">💧 Humidity: 57.84% (Medium to High)</p>
+                                <p class="text-gray-300 text-sm">Optimal range 0.68-0.86</p>
+                            </div>
+                            <div class="highlight-box">
+                                <p class="text-white font-semibold mb-1">🌡️ Temperature</p>
+                                <p class="text-gray-300 text-sm">Avg High: 67.12°F | Avg Low: 48.64°F</p>
+                            </div>
+                            <div class="highlight-box">
+                                <p class="text-white font-semibold mb-1">☁️ Cloud Cover: Low</p>
+                                <p class="text-gray-300 text-sm">Clear weather conditions preferred</p>
+                            </div>
+                            <div class="highlight-box">
+                                <p class="text-white font-semibold mb-1">💨 Wind Speed: Low to Medium</p>
+                                <p class="text-gray-300 text-sm">Calm conditions (0-6 scale)</p>
+                            </div>
+                            <div class="highlight-box">
+                                <p class="text-white font-semibold mb-1">🌀 Atmospheric Pressure: Medium</p>
+                                <p class="text-gray-300 text-sm">Range: 1010-1025</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="insight-box">
+                        <h3 class="text-xl font-semibold mb-4">🔍 Key Findings</h3>
+                        <ul class="space-y-3 text-gray-300">
+                            <li class="flex items-start">
+                                <span class="text-green-400 mr-2 mt-1">→</span>
+                                <span><strong>Clear Weather Preference:</strong> Foggy or overcast conditions show minimal sightings compared to clear days</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-400 mr-2 mt-1">→</span>
+                                <span><strong>Seasonal Activity:</strong> Summer/Fall outdoor activity correlation with increased human presence in wilderness</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-400 mr-2 mt-1">→</span>
+                                <span><strong>Geographic Concentration:</strong> Pacific Northwest dominance suggests habitat preference or reporting bias</span>
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-green-400 mr-2 mt-1">→</span>
+                                <span><strong>Modern Increase:</strong> Spike in 2000s could indicate increased awareness, reporting, or internet accessibility</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conclusion Section -->
+            <div id="conclusion" class="content-section">
+                <h2 class="text-3xl font-bold mb-6">Conclusion</h2>
+                
+                <div class="insight-box">
+                    <h3 class="text-2xl font-semibold mb-4">📋 Summary</h3>
+                    <p class="text-gray-300 mb-4 leading-relaxed text-lg">
+                        Based on comprehensive analysis of data from 1921 to 2021 covering <strong>5,021 sightings</strong> across <strong>1,036 counties</strong>, several clear patterns emerge:
+                    </p>
+                    
+                    <div class="space-y-4">
+                        <div class="highlight-box">
+                            <p class="text-white font-semibold mb-2">🗺️ Geographic Pattern</p>
+                            <p class="text-gray-300">Washington state leads significantly in BigFoot sightings, followed by the Pacific Northwest region, suggesting either habitat preference or regional reporting tendencies.</p>
+                        </div>
+                        
+                        <div class="highlight-box">
+                            <p class="text-white font-semibold mb-2">📅 Temporal Pattern</p>
+                            <p class="text-gray-300">Sightings predominantly occur during Summer (32%) and Fall (33%) seasons, with August showing the highest monthly frequency. This coincides with peak outdoor recreational activity periods.</p>
+                        </div>
+                        
+                        <div class="highlight-box">
+                            <p class="text-white font-semibold mb-2">🌤️ Weather Correlation</p>
+                            <p class="text-gray-300">The most conducive conditions for sightings include: <strong>high visibility</strong> (clear skies), <strong>medium to high humidity</strong> (57.84% average), <strong>low cloud cover</strong>, <strong>medium atmospheric pressure</strong> (1010-1025), and <strong>low to medium wind speeds</strong>. Temperature range averages between 48-67°F.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insight-box mt-8">
+                    <h3 class="text-2xl font-semibold mb-4">✅ Key Takeaways</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="text-lg font-semibold mb-3 text-white">Technical Skills Developed</h4>
+                            <ul class="space-y-2 text-gray-300">
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> Advanced PowerBI dashboard design and visualization</li>
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> Data cleaning and preprocessing techniques</li>
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> Statistical analysis and correlation studies</li>
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> Geographic and temporal data analysis</li>
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> Multi-dimensional data storytelling</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold mb-3 text-white">Analytical Insights</h4>
+                            <ul class="space-y-2 text-gray-300">
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> Weather pattern correlation with event occurrence</li>
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> Seasonal trend identification and visualization</li>
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> Geographic hotspot mapping and analysis</li>
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> Temporal pattern recognition over 100-year span</li>
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> Complex data synthesis into actionable insights</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insight-box mt-8">
+                    <h3 class="text-xl font-semibold mb-4">🏆 Competition Achievement</h3>
+                    <p class="text-gray-300 leading-relaxed">
+                        This project was created for the <strong>DataDNA Dataset Challenge</strong> by Pomerol Partners (February 2023), demonstrating advanced PowerBI visualization skills, statistical analysis capabilities, and creative problem-solving in a competitive environment. The project showcases the ability to transform raw data into compelling visual narratives that reveal hidden patterns and insights.
+                    </p>
+                </div>
+
+                <div class="mt-12 text-center">
+                    <a href="Index.html" class="resource-button">
+                        ← Back to Portfolio
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all content sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab-button');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected content section
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+            
+            // Scroll to top of content
+            window.scrollTo({
+                top: 400,
+                behavior: 'smooth'
+            });
+        }
+    </script>
+</body>
+</html>
