@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Insights (SQL & PowerBI) - Yogavarshni Ramachandran</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000000;
+            color: #ffffff;
+            overflow-x: hidden;
+            font-weight: 300;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #ffffff 0%, #cccccc 50%, #999999 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .status-done {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+        
+        .status-date {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        .status-category {
+            background: rgba(168, 85, 247, 0.2);
+            color: #a855f7;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+        
+        .resource-button {
+            background: #ffffff;
+            color: #000000;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 12px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 8px;
+        }
+        
+        .resource-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(255, 255, 255, 0.3);
+            background: #f0f0f0;
+        }
+        
+        .tab-button {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            margin: 6px;
+            cursor: pointer;
+        }
+        
+        .tab-button.active {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .tab-button:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .content-section {
+            display: none;
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        .dashboard-image {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin: 20px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .dashboard-image:hover {
+            transform: scale(1.02);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
+        }
+        
+        .insight-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .highlight-box {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .text-5xl {
+                font-size: 2rem;
+            }
+            
+            .resource-button {
+                display: block;
+                width: 100%;
+                margin: 8px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen py-8">
+        <!-- Top Navigation -->
+        <div class="container mx-auto px-4 sm:px-8 max-w-7xl mb-8">
+            <div class="flex justify-between items-center">
+                <a href="Index.html" class="flex items-center text-white text-xl font-black hover:text-gray-300 transition-colors">
+                    <span class="mr-2">←</span> Yogavarshni
+                </a>
+                <a href="Index.html#projects" class="text-gray-400 hover:text-white transition-colors text-sm">
+                    Back to Projects
+                </a>
+            </div>
+        </div>
+
+        <div class="container mx-auto px-4 sm:px-8 max-w-6xl">
+            <!-- Project Header -->
+            <div class="mb-8">
+                <div class="flex items-start gap-4 mb-4">
+                    <div class="text-6xl">📊</div>
+                    <div>
+                        <h1 class="text-4xl sm:text-5xl font-black mb-2">Sales Insights (SQL & PowerBi)</h1>
+                        <p class="text-lg text-gray-400">Designed interactive dashboards for sales insights for a hardware company. Visualization consists of Profit Analysis, Key Insights, and Performance Insights.</p>
+                    </div>
+                </div>
+                
+                <!-- Status Badges -->
+                <div class="flex flex-wrap mt-6">
+                    <span class="status-badge status-done">Done</span>
+                    <span class="status-badge status-date">December 14, 2021</span>
+                    <span class="status-badge status-category">Data Visualization & BI</span>
+                </div>
+            </div>
+
+            <!-- Resource Buttons -->
+            <div class="flex flex-wrap mb-8">
+                <a href="https://app.powerbi.com/groups/me/reports/8797f05a-6016-4aaf-a56e-532305979789/ReportSectionaf7031103000119047e0?experience=power-bi" target="_blank" class="resource-button">
+                    📊 POWERBI DASHBOARD
+                </a>
+                <a href="https://www.notion.so/Sales-Insights-SQL-PowerBi-29a9f6d6f0cd4a13b518caf721a8b403" target="_blank" class="resource-button">
+                    📝 NOTION
+                </a>
+                <a href="https://github.com/Yogavarshni4699/Data-visualization" target="_blank" class="resource-button">
+                    💻 GITHUB
+                </a>
+            </div>
+
+            <!-- Tab Navigation -->
+            <div class="flex flex-wrap mb-12">
+                <button class="tab-button active" onclick="showTab('overview')">📊 Overview</button>
+                <button class="tab-button" onclick="showTab('analysis')">📈 Analysis</button>
+                <button class="tab-button" onclick="showTab('insights')">💡 Key Insights</button>
+                <button class="tab-button" onclick="showTab('conclusion')">✅ Conclusion</button>
+            </div>
+
+            <!-- Overview Section -->
+            <div id="overview" class="content-section active">
+                <h2 class="text-3xl font-bold mb-6">Introduction</h2>
+                <p class="text-gray-300 mb-6 leading-relaxed text-lg">
+                    Built comprehensive dashboards for tracking revenue numbers, sales quantity, profit margin, revenue contribution, top customers, and top products for <strong>AtliQ</strong>, a hardware company with locations across India. This project demonstrates end-to-end business intelligence implementation using SQL for data extraction and PowerBI for visualization.
+                </p>
+                
+                <div class="insight-box">
+                    <h3 class="text-xl font-semibold mb-4">🎯 Problem Statement</h3>
+                    <p class="text-gray-300 leading-relaxed mb-4">
+                        <strong>"AtliQ"</strong> is a hardware company located all over India. Sales have been declining for the past few months. The company wants insights into the issues regarding business. Tracking all records in a dynamically growing market is challenging. Reviewing large Excel files is tedious. The solution is to provide interactive dashboards for stakeholders.
+                    </p>
+                    <div class="mt-4">
+                        <h4 class="text-lg font-semibold mb-3 text-white">Business Challenges:</h4>
+                        <ul class="text-gray-300 space-y-2">
+                            <li class="flex items-start"><span class="text-red-400 mr-2">•</span> Limited visibility into sales performance, profitability, and growth over time</li>
+                            <li class="flex items-start"><span class="text-red-400 mr-2">•</span> Difficulty in identifying areas for improvement in the sales process</li>
+                            <li class="flex items-start"><span class="text-red-400 mr-2">•</span> Need to increase revenue and optimize sales and marketing strategies</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="insight-box">
+                    <h3 class="text-xl font-semibold mb-4">🎯 Project Planning using AIM's Grid</h3>
+                    
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h4 class="text-lg font-semibold mb-3 text-white">Purpose</h4>
+                            <p class="text-gray-300">To unlock sales insights that are not visible before for the sales team for decision support & automate them to reduce manual time spent in data gathering.</p>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold mb-3 text-white">End Results</h4>
+                            <p class="text-gray-300">An automated dashboard providing quick & latest sales insights in order to support data-driven decision-making.</p>
+                        </div>
+                    </div>
+                    
+                    <h4 class="text-lg font-semibold mb-3 text-white">Stakeholders</h4>
+                    <ul class="text-gray-300 space-y-2 mb-6">
+                        <li class="flex items-center"><span class="text-blue-400 mr-2">→</span> Sales Director</li>
+                        <li class="flex items-center"><span class="text-blue-400 mr-2">→</span> Marketing Team</li>
+                        <li class="flex items-center"><span class="text-blue-400 mr-2">→</span> Customer Service Team</li>
+                        <li class="flex items-center"><span class="text-blue-400 mr-2">→</span> Data & Analytics Team</li>
+                        <li class="flex items-center"><span class="text-blue-400 mr-2">→</span> IT</li>
+                    </ul>
+                    
+                    <h4 class="text-lg font-semibold mb-3 text-white">Success Criteria</h4>
+                    <ul class="text-gray-300 space-y-2">
+                        <li class="flex items-start"><span class="text-green-400 mr-2">✓</span> Dashboard(s) uncovering sales order insights with the latest data available</li>
+                        <li class="flex items-start"><span class="text-green-400 mr-2">✓</span> Sales team able to make better decisions & prove <strong>10% cost savings</strong> of total spend</li>
+                        <li class="flex items-start"><span class="text-green-400 mr-2">✓</span> Sales Analysts stop data gathering manually to save <strong>20% of their business time</strong> and reinvest it in value-added activity</li>
+                    </ul>
+                </div>
+
+                <h3 class="text-2xl font-bold mb-4 mt-8">Steps Followed for Analysis</h3>
+                <ol class="list-decimal list-inside text-gray-300 space-y-2 text-lg">
+                    <li>Data Discovery</li>
+                    <li>Data Extraction</li>
+                    <li>Data modeling using <strong>star schema</strong></li>
+                    <li>Data merging/munging using <strong>SQL</strong></li>
+                    <li>Data Cleaning in power query (Power BI) and ETL</li>
+                    <li>Building dashboards in PowerBI</li>
+                </ol>
+
+                <h3 class="text-2xl font-bold mb-4 mt-8">🛠️ Technologies Used</h3>
+                <div class="flex flex-wrap gap-2">
+                    <span class="bg-blue-900/30 text-blue-300 px-4 py-2 rounded-full text-sm font-semibold border border-blue-700/50">PowerBI</span>
+                    <span class="bg-green-900/30 text-green-300 px-4 py-2 rounded-full text-sm font-semibold border border-green-700/50">SQL</span>
+                    <span class="bg-purple-900/30 text-purple-300 px-4 py-2 rounded-full text-sm font-semibold border border-purple-700/50">Excel</span>
+                    <span class="bg-orange-900/30 text-orange-300 px-4 py-2 rounded-full text-sm font-semibold border border-orange-700/50">ETL</span>
+                    <span class="bg-pink-900/30 text-pink-300 px-4 py-2 rounded-full text-sm font-semibold border border-pink-700/50">Data Modeling</span>
+                    <span class="bg-cyan-900/30 text-cyan-300 px-4 py-2 rounded-full text-sm font-semibold border border-cyan-700/50">Star Schema</span>
+                    <span class="bg-yellow-900/30 text-yellow-300 px-4 py-2 rounded-full text-sm font-semibold border border-yellow-700/50">Business Intelligence</span>
+                </div>
+
+                <div class="insight-box mt-8">
+                    <h3 class="text-xl font-semibold mb-4">💼 Key Skills Demonstrated</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="text-lg font-semibold mb-3 text-white">Technical Skills</h4>
+                            <ul class="text-gray-300 space-y-2">
+                                <li class="flex items-start"><span class="text-blue-400 mr-2">→</span> <strong>Data Analysis:</strong> Utilized measures and data analysis techniques</li>
+                                <li class="flex items-start"><span class="text-blue-400 mr-2">→</span> <strong>Trend Identification:</strong> Identified periods of high and low sales growth</li>
+                                <li class="flex items-start"><span class="text-blue-400 mr-2">→</span> <strong>Profit Analysis:</strong> Calculated profit margins and performance metrics</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold mb-3 text-white">Business Skills</h4>
+                            <ul class="text-gray-300 space-y-2">
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> <strong>Data Visualization:</strong> Interactive and visually appealing dashboards</li>
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> <strong>Communication:</strong> Clear insights to stakeholders</li>
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> <strong>Strategic Thinking:</strong> Optimizing sales and marketing strategies</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analysis Section -->
+            <div id="analysis" class="content-section">
+                <h2 class="text-3xl font-bold mb-6">Dashboard Analysis</h2>
+                
+                <h3 class="text-2xl font-semibold mb-4">📊 Key Insights Dashboard</h3>
+                <img src="Images/s1.png" alt="Key Insights Dashboard" class="dashboard-image">
+                <p class="text-gray-400 mb-8">
+                    <strong>Key Observations:</strong> AtliQ has generated total revenue of <strong>₹985 million</strong>. Primary customer base stems from the E-commerce sector (75.0%). The Delhi region has demonstrated impressive growth in both revenue and market sales between 2017 and 2020. However, there has been a gradual decline in revenue during Q3, with figures dropping below 200 million Rupees.
+                </p>
+
+                <h3 class="text-2xl font-semibold mb-4">💰 Profit Analysis Dashboard</h3>
+                <img src="Images/s2.png" alt="Profit Analysis Dashboard" class="dashboard-image">
+                <p class="text-gray-400 mb-8">
+                    <strong>Profit Examination:</strong> Delhi boasts the most substantial profit margin from revenue, standing at <strong>52.8%</strong>. The dashboard shows profit contribution by market, profit margin by market, revenue trends, and detailed profit analysis by customers. Top customers are ranked in descending order based on revenue, accompanied by their respective revenue contribution percentages.
+                </p>
+
+                <h3 class="text-2xl font-semibold mb-4">📈 Performance Insights Dashboard</h3>
+                <img src="Images/s3.png" alt="Performance Insights Dashboard" class="dashboard-image">
+                <p class="text-gray-400 mb-8">
+                    <strong>Performance Analysis:</strong> Bhubaneswar exhibited the most noteworthy profitability with a <strong>10.5% profit margin</strong> in 2020. The revenue pattern shows a peak in January, a dip in April, and gradual return to average levels from May to June. The dashboard tracks revenue of ₹42M, sales quantity of 350K, and total profit margin of ₹2.06M with detailed monthly and quarterly breakdowns.
+                </p>
+            </div>
+
+            <!-- Key Insights Section -->
+            <div id="insights" class="content-section">
+                <h2 class="text-3xl font-bold mb-6">Key Insights</h2>
+                
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="insight-box">
+                        <h3 class="text-xl font-semibold mb-4">💰 Revenue & Sales Performance</h3>
+                        <div class="highlight-box">
+                            <p class="text-white font-semibold mb-2">Total Revenue: ₹985M</p>
+                            <p class="text-gray-300 text-sm">Generated across all markets between 2017-2020</p>
+                        </div>
+                        <div class="highlight-box">
+                            <p class="text-white font-semibold mb-2">Sales Quantity: 2M units</p>
+                            <p class="text-gray-300 text-sm">Total products sold across India</p>
+                        </div>
+                        <div class="highlight-box">
+                            <p class="text-white font-semibold mb-2">Q3 Revenue Decline</p>
+                            <p class="text-gray-300 text-sm">Revenue dropped below ₹200M requiring investigation</p>
+                        </div>
+                    </div>
+
+                    <div class="insight-box">
+                        <h3 class="text-xl font-semibold mb-4">📍 Geographic Performance</h3>
+                        <div class="highlight-box">
+                            <p class="text-white font-semibold mb-2">🥇 Top Market: Delhi</p>
+                            <p class="text-gray-300 text-sm">52.8% profit margin - highest in all regions</p>
+                        </div>
+                        <div class="highlight-box">
+                            <p class="text-white font-semibold mb-2">Best 2020 Performance: Bhubaneswar</p>
+                            <p class="text-gray-300 text-sm">10.5% profit margin in 2020</p>
+                        </div>
+                        <div class="highlight-box">
+                            <p class="text-white font-semibold mb-2">Strong Growth: Delhi Region</p>
+                            <p class="text-gray-300 text-sm">Impressive growth in revenue and market sales 2017-2020</p>
+                        </div>
+                    </div>
+
+                    <div class="insight-box">
+                        <h3 class="text-xl font-semibold mb-4">👥 Customer Insights</h3>
+                        <div class="highlight-box">
+                            <p class="text-white font-semibold mb-2">Primary Segment: E-commerce</p>
+                            <p class="text-gray-300 text-sm">75.0% of customer base from E-commerce sector</p>
+                        </div>
+                        <div class="highlight-box">
+                            <p class="text-white font-semibold mb-2">Brick & Mortar: 24.4%</p>
+                            <p class="text-gray-300 text-sm">Traditional retail segment contribution</p>
+                        </div>
+                        <div class="highlight-box">
+                            <p class="text-white font-semibold mb-2">Top Customers Identified</p>
+                            <p class="text-gray-300 text-sm">Ranked by revenue contribution with detailed profit analysis</p>
+                        </div>
+                    </div>
+
+                    <div class="insight-box">
+                        <h3 class="text-xl font-semibold mb-4">📅 Temporal Patterns</h3>
+                        <div class="space-y-3">
+                            <div class="highlight-box">
+                                <p class="text-white font-semibold mb-1">Revenue Peak: January</p>
+                                <p class="text-gray-300 text-sm">Highest monthly revenue recorded</p>
+                            </div>
+                            <div class="highlight-box">
+                                <p class="text-white font-semibold mb-1">Revenue Dip: April 2020</p>
+                                <p class="text-gray-300 text-sm">Significant drop requiring detailed assessment</p>
+                            </div>
+                            <div class="highlight-box">
+                                <p class="text-white font-semibold mb-1">Q2 to Q3 Transition</p>
+                                <p class="text-gray-300 text-sm">Critical period with declining revenue trend</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insight-box mt-8">
+                    <h3 class="text-2xl font-semibold mb-4">🎯 Solution Delivered</h3>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start">
+                            <span class="text-green-400 mr-2 mt-1">→</span>
+                            <span>Created a comprehensive Sales Insights Dashboard using PowerBI to provide actionable insights for increasing revenue and sales performance</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-400 mr-2 mt-1">→</span>
+                            <span>Utilized various measures including Revenue Profit Margin, profit contribution by market, Sales by Market, Revenue Trend, Customer type, and Sales Growth</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-400 mr-2 mt-1">→</span>
+                            <span>Analyzed customer data to identify trends, patterns, and areas for improvement in sales and profitability</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-400 mr-2 mt-1">→</span>
+                            <span>Provided valuable insights to optimize sales and marketing strategies, increase revenue, and drive business success</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Conclusion Section -->
+            <div id="conclusion" class="content-section">
+                <h2 class="text-3xl font-bold mb-6">Conclusion</h2>
+                
+                <div class="insight-box">
+                    <h3 class="text-2xl font-semibold mb-4">📋 Impact and Results</h3>
+                    <p class="text-gray-300 mb-4 leading-relaxed text-lg">
+                        The Sales Insights Dashboard project successfully addressed AtliQ's business needs by providing comprehensive visibility into sales performance, profitability, and growth patterns across different markets and customer segments.
+                    </p>
+                    
+                    <div class="space-y-4">
+                        <div class="highlight-box">
+                            <p class="text-white font-semibold mb-2">✅ Improved Visibility</p>
+                            <p class="text-gray-300">Enhanced visibility into sales performance, profitability, and growth over time across all markets</p>
+                        </div>
+                        
+                        <div class="highlight-box">
+                            <p class="text-white font-semibold mb-2">✅ Actionable Insights</p>
+                            <p class="text-gray-300">Identified specific areas for optimization in sales and marketing strategies to increase revenue</p>
+                        </div>
+                        
+                        <div class="highlight-box">
+                            <p class="text-white font-semibold mb-2">✅ Data-Driven Decisions</p>
+                            <p class="text-gray-300">Enabled stakeholders to make informed, data-driven decisions for business growth</p>
+                        </div>
+                        
+                        <div class="highlight-box">
+                            <p class="text-white font-semibold mb-2">✅ Efficiency Gains</p>
+                            <p class="text-gray-300">Automated data gathering process saving 20% of business time for sales analysts</p>
+                        </div>
+                        
+                        <div class="highlight-box">
+                            <p class="text-white font-semibold mb-2">✅ Cost Optimization</p>
+                            <p class="text-gray-300">Achieved 10% cost savings of total spend through better decision-making</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insight-box mt-8">
+                    <h3 class="text-2xl font-semibold mb-4">🎓 Key Learnings & Takeaways</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="text-lg font-semibold mb-3 text-white">Technical Growth</h4>
+                            <ul class="space-y-2 text-gray-300">
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> Advanced PowerBI dashboard design and development</li>
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> SQL database integration and data extraction</li>
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> ETL processes and data cleaning in Power Query</li>
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> Star schema data modeling for BI solutions</li>
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> Creating interactive and visually appealing visualizations</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold mb-3 text-white">Business Skills</h4>
+                            <ul class="space-y-2 text-gray-300">
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> Understanding stakeholder requirements and pain points</li>
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> Translating business problems into technical solutions</li>
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> Effective communication of insights to non-technical audiences</li>
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> Strategic thinking for sales and marketing optimization</li>
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> Empathizing with end users for better UX design</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insight-box mt-8">
+                    <h3 class="text-xl font-semibold mb-4">💡 Final Thoughts</h3>
+                    <p class="text-gray-300 leading-relaxed">
+                        The Sales Insights Dashboard serves as a powerful tool for AtliQ to increase revenue, improve profitability, and gain a competitive edge in the market. By utilizing data analysis and visualization skills, this project enabled informed decision-making and optimization of sales and marketing strategies, ultimately driving business success. The automated dashboard eliminated tedious manual Excel reviews and provided stakeholders with quick, actionable insights for data-driven decision-making.
+                    </p>
+                </div>
+
+                <div class="mt-12 text-center">
+                    <a href="Index.html" class="resource-button">
+                        ← Back to Portfolio
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all content sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab-button');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected content section
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+            
+            // Scroll to top of content
+            window.scrollTo({
+                top: 400,
+                behavior: 'smooth'
+            });
+        }
+    </script>
+</body>
+</html>

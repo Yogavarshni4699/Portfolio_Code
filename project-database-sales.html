@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Design - Sales Analysis - Yogavarshni Ramachandran</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000000;
+            color: #ffffff;
+            overflow-x: hidden;
+            font-weight: 300;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #ffffff 0%, #cccccc 50%, #999999 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .status-done {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+        
+        .status-date {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        .status-category {
+            background: rgba(168, 85, 247, 0.2);
+            color: #a855f7;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+        }
+        
+        .resource-button {
+            background: #ffffff;
+            color: #000000;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 12px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 8px;
+        }
+        
+        .resource-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(255, 255, 255, 0.3);
+            background: #f0f0f0;
+        }
+        
+        .tab-button {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            margin: 6px;
+            cursor: pointer;
+        }
+        
+        .tab-button.active {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .tab-button:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .content-section {
+            display: none;
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        .insight-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .highlight-box {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .text-5xl {
+                font-size: 2rem;
+            }
+            
+            .resource-button {
+                display: block;
+                width: 100%;
+                margin: 8px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen py-8">
+        <!-- Top Navigation -->
+        <div class="container mx-auto px-4 sm:px-8 max-w-7xl mb-8">
+            <div class="flex justify-between items-center">
+                <a href="Index.html" class="flex items-center text-white text-xl font-black hover:text-gray-300 transition-colors">
+                    <span class="mr-2">←</span> Yogavarshni
+                </a>
+                <a href="Index.html#projects" class="text-gray-400 hover:text-white transition-colors text-sm">
+                    Back to Projects
+                </a>
+            </div>
+        </div>
+
+        <div class="container mx-auto px-4 sm:px-8 max-w-6xl">
+            <!-- Project Header -->
+            <div class="mb-8">
+                <div class="flex items-start gap-4 mb-4">
+                    <div class="text-6xl">🗄️</div>
+                    <div>
+                        <h1 class="text-4xl sm:text-5xl font-black mb-2">Database Design - Sales Analysis</h1>
+                        <p class="text-lg text-gray-400">End-to-end system that integrates a customer/staff operational module for real-time order tracking and feedback with an analytical module providing dynamic sales and shipment insights</p>
+                    </div>
+                </div>
+                
+                <!-- Status Badges -->
+                <div class="flex flex-wrap mt-6">
+                    <span class="status-badge status-done">Done</span>
+                    <span class="status-badge status-date">2021</span>
+                    <span class="status-badge status-category">Database Design & Analytics</span>
+                </div>
+            </div>
+
+            <!-- Resource Buttons -->
+            <div class="flex flex-wrap mb-8">
+                <a href="https://www.notion.so/Database-Design-Sales-Analysis-1bb5280b487b8043b257cf0cfb75b85e" target="_blank" class="resource-button">
+                    📝 NOTION
+                </a>
+                <a href="https://github.com/Yogavarshni4699/Database_Design_and_Analytics" target="_blank" class="resource-button">
+                    💻 GITHUB
+                </a>
+            </div>
+
+            <!-- Tab Navigation -->
+            <div class="flex flex-wrap mb-12">
+                <button class="tab-button active" onclick="showTab('overview')">📊 Overview</button>
+                <button class="tab-button" onclick="showTab('architecture')">🏗️ Architecture</button>
+                <button class="tab-button" onclick="showTab('features')">⚡ Features</button>
+                <button class="tab-button" onclick="showTab('conclusion')">✅ Conclusion</button>
+            </div>
+
+            <!-- Overview Section -->
+            <div id="overview" class="content-section active">
+                <h2 class="text-3xl font-bold mb-6">Introduction</h2>
+                <p class="text-gray-300 mb-6 leading-relaxed text-lg">
+                    An end-to-end application designed to transform the way sales and shipping data are managed and analyzed. This comprehensive solution caters to both customer-facing operations and back-end business analytics by integrating robust database design, ETL processes, and interactive user interfaces to improve order tracking, feedback collection, and strategic decision-making.
+                </p>
+                
+                <div class="insight-box">
+                    <h3 class="text-xl font-semibold mb-4">🎯 Project Motivation</h3>
+                    <p class="text-gray-300 leading-relaxed mb-4">
+                        Recognizing the critical role of customer feedback and the need for operational transparency in e-commerce, this project was initiated to empower businesses—especially those without their own shipment service. The solution provides both operational efficiency and strategic analytics capabilities.
+                    </p>
+                    <h4 class="text-lg font-semibold mb-3 text-white">Data Sources</h4>
+                    <ul class="text-gray-300 space-y-2">
+                        <li class="flex items-start"><span class="text-blue-400 mr-2">→</span> E-commerce sales dataset from Kaggle</li>
+                        <li class="flex items-start"><span class="text-blue-400 mr-2">→</span> Synthetic data from Mockaroo (names, addresses)</li>
+                        <li class="flex items-start"><span class="text-blue-400 mr-2">→</span> Data validation using ChatGPT</li>
+                    </ul>
+                </div>
+
+                <h3 class="text-2xl font-bold mb-4 mt-8">🛠️ Technologies Used</h3>
+                <div class="flex flex-wrap gap-2">
+                    <span class="bg-blue-900/30 text-blue-300 px-4 py-2 rounded-full text-sm font-semibold border border-blue-700/50">Python</span>
+                    <span class="bg-green-900/30 text-green-300 px-4 py-2 rounded-full text-sm font-semibold border border-green-700/50">MySQL Workbench</span>
+                    <span class="bg-purple-900/30 text-purple-300 px-4 py-2 rounded-full text-sm font-semibold border border-purple-700/50">PyQt5</span>
+                    <span class="bg-orange-900/30 text-orange-300 px-4 py-2 rounded-full text-sm font-semibold border border-orange-700/50">PyQt Designer</span>
+                    <span class="bg-pink-900/30 text-pink-300 px-4 py-2 rounded-full text-sm font-semibold border border-pink-700/50">Pandas</span>
+                    <span class="bg-cyan-900/30 text-cyan-300 px-4 py-2 rounded-full text-sm font-semibold border border-cyan-700/50">Scikit-learn</span>
+                    <span class="bg-yellow-900/30 text-yellow-300 px-4 py-2 rounded-full text-sm font-semibold border border-yellow-700/50">ETL Pipeline</span>
+                    <span class="bg-red-900/30 text-red-300 px-4 py-2 rounded-full text-sm font-semibold border border-red-700/50">Jupyter Notebook</span>
+                </div>
+
+                <div class="insight-box mt-8">
+                    <h3 class="text-xl font-semibold mb-4">🎯 Project Objectives</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="text-lg font-semibold mb-3 text-white">Customer-Facing Goals</h4>
+                            <ul class="text-gray-300 space-y-2">
+                                <li class="flex items-start"><span class="text-green-400 mr-2">✓</span> Real-time order tracking</li>
+                                <li class="flex items-start"><span class="text-green-400 mr-2">✓</span> Secure user authentication</li>
+                                <li class="flex items-start"><span class="text-green-400 mr-2">✓</span> Feedback and rating system</li>
+                                <li class="flex items-start"><span class="text-green-400 mr-2">✓</span> Personalized recommendations</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold mb-3 text-white">Business Analytics Goals</h4>
+                            <ul class="text-gray-300 space-y-2">
+                                <li class="flex items-start"><span class="text-blue-400 mr-2">✓</span> Strategic sales insights</li>
+                                <li class="flex items-start"><span class="text-blue-400 mr-2">✓</span> Historical trend analysis</li>
+                                <li class="flex items-start"><span class="text-blue-400 mr-2">✓</span> Interactive dashboards</li>
+                                <li class="flex items-start"><span class="text-blue-400 mr-2">✓</span> Data-driven decision making</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Architecture Section -->
+            <div id="architecture" class="content-section">
+                <h2 class="text-3xl font-bold mb-6">System Architecture</h2>
+                
+                <div class="insight-box">
+                    <h3 class="text-2xl font-semibold mb-4">🏗️ Dual-Database Strategy</h3>
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        The project employs a sophisticated dual-database architecture to separate operational transactions from analytical processing, ensuring optimal performance for both real-time operations and historical analysis.
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="highlight-box">
+                            <h4 class="text-lg font-semibold mb-3 text-white">💼 Operational Database</h4>
+                            <p class="text-gray-300 mb-4">Handles day-to-day transactions and stores the latest 30 days of data in a normalized relational schema.</p>
+                            <ul class="text-gray-300 space-y-2 text-sm">
+                                <li class="flex items-start"><span class="text-blue-400 mr-2">→</span> Order information tracking</li>
+                                <li class="flex items-start"><span class="text-blue-400 mr-2">→</span> Customer data management</li>
+                                <li class="flex items-start"><span class="text-blue-400 mr-2">→</span> Product details storage</li>
+                                <li class="flex items-start"><span class="text-blue-400 mr-2">→</span> Staff interaction logs</li>
+                                <li class="flex items-start"><span class="text-blue-400 mr-2">→</span> Real-time shipping updates</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="highlight-box">
+                            <h4 class="text-lg font-semibold mb-3 text-white">📊 Analytical Database</h4>
+                            <p class="text-gray-300 mb-4">Archives past 3 months of data in a star schema format optimized for complex analytical queries.</p>
+                            <ul class="text-gray-300 space-y-2 text-sm">
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> Central fact table (sales_fact_table)</li>
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> Product dimension table</li>
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> Date dimension table</li>
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> Location dimension table</li>
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> Fulfillment dimension table</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insight-box mt-8">
+                    <h3 class="text-2xl font-semibold mb-4">🔄 ETL Pipeline</h3>
+                    <p class="text-gray-300 mb-6 leading-relaxed">
+                        Implemented using Python and SQL to seamlessly transfer data between operational and analytical databases.
+                    </p>
+                    
+                    <div class="space-y-4">
+                        <div class="highlight-box">
+                            <h4 class="text-lg font-semibold mb-2 text-white">1. Extract</h4>
+                            <p class="text-gray-300 text-sm">Data is extracted from the operational database on a scheduled basis</p>
+                        </div>
+                        
+                        <div class="highlight-box">
+                            <h4 class="text-lg font-semibold mb-2 text-white">2. Transform</h4>
+                            <p class="text-gray-300 text-sm">Data quality checks, consistency validation, and schema transformation to star schema format</p>
+                        </div>
+                        
+                        <div class="highlight-box">
+                            <h4 class="text-lg font-semibold mb-2 text-white">3. Load</h4>
+                            <p class="text-gray-300 text-sm">Clean data is loaded into analytical fact and dimension tables for strategic analysis</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insight-box mt-8">
+                    <h3 class="text-2xl font-semibold mb-4">🔐 Security & Data Governance</h3>
+                    <ul class="text-gray-300 space-y-3">
+                        <li class="flex items-start">
+                            <span class="text-green-400 mr-2 mt-1">→</span>
+                            <span><strong>Password Security:</strong> Argon2 hashing for enhanced password protection</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-400 mr-2 mt-1">→</span>
+                            <span><strong>Data Integrity:</strong> Normalized schemas and robust ETL processes</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-400 mr-2 mt-1">→</span>
+                            <span><strong>Access Control:</strong> Role-based authentication for customers and staff</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-green-400 mr-2 mt-1">→</span>
+                            <span><strong>Data Privacy:</strong> Secure storage and transmission of sensitive information</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Features Section -->
+            <div id="features" class="content-section">
+                <h2 class="text-3xl font-bold mb-6">Key Features</h2>
+                
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="insight-box">
+                        <h3 class="text-xl font-semibold mb-4">👥 Operational Module</h3>
+                        
+                        <h4 class="text-lg font-semibold mb-3 text-white">Customer Interface</h4>
+                        <div class="space-y-3 mb-6">
+                            <div class="highlight-box">
+                                <p class="text-white font-semibold mb-1">🔐 User Authentication</p>
+                                <p class="text-gray-300 text-sm">Secure account creation and login with Argon2 password hashing</p>
+                            </div>
+                            <div class="highlight-box">
+                                <p class="text-white font-semibold mb-1">📦 Order Tracking</p>
+                                <p class="text-gray-300 text-sm">Real-time updates on order status from processing to delivery</p>
+                            </div>
+                            <div class="highlight-box">
+                                <p class="text-white font-semibold mb-1">⭐ Feedback System</p>
+                                <p class="text-gray-300 text-sm">Rate and provide feedback on order and shipping experience</p>
+                            </div>
+                            <div class="highlight-box">
+                                <p class="text-white font-semibold mb-1">🎯 Personalized Recommendations</p>
+                                <p class="text-gray-300 text-sm">Product suggestions based on purchase history and behavior</p>
+                            </div>
+                        </div>
+                        
+                        <h4 class="text-lg font-semibold mb-3 text-white">Staff Interface</h4>
+                        <div class="space-y-3">
+                            <div class="highlight-box">
+                                <p class="text-white font-semibold mb-1">📝 Order Management</p>
+                                <p class="text-gray-300 text-sm">Update order status (shipped, pending, canceled)</p>
+                            </div>
+                            <div class="highlight-box">
+                                <p class="text-white font-semibold mb-1">💬 Customer Communication</p>
+                                <p class="text-gray-300 text-sm">Real-time notifications to customers on order updates</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="insight-box">
+                        <h3 class="text-xl font-semibold mb-4">📊 Analytical Module</h3>
+                        
+                        <h4 class="text-lg font-semibold mb-3 text-white">Interactive Dashboards</h4>
+                        <div class="space-y-3 mb-6">
+                            <div class="highlight-box">
+                                <p class="text-white font-semibold mb-1">📈 Trend Analysis</p>
+                                <p class="text-gray-300 text-sm">Line charts showing order and SKU counts over time</p>
+                            </div>
+                            <div class="highlight-box">
+                                <p class="text-white font-semibold mb-1">🎯 Order Status Monitoring</p>
+                                <p class="text-gray-300 text-sm">Pie charts and bar charts for fulfillment efficiency</p>
+                            </div>
+                            <div class="highlight-box">
+                                <p class="text-white font-semibold mb-1">🗺️ Geographic Insights</p>
+                                <p class="text-gray-300 text-sm">Visualizations of city-wise sales distribution</p>
+                            </div>
+                            <div class="highlight-box">
+                                <p class="text-white font-semibold mb-1">🔍 Drill-Down Capabilities</p>
+                                <p class="text-gray-300 text-sm">Interactive filters for product and location analysis</p>
+                            </div>
+                        </div>
+                        
+                        <h4 class="text-lg font-semibold mb-3 text-white">Advanced Features</h4>
+                        <ul class="text-gray-300 space-y-2">
+                            <li class="flex items-start"><span class="text-blue-400 mr-2">→</span> Dynamic filter application</li>
+                            <li class="flex items-start"><span class="text-blue-400 mr-2">→</span> Sortable detailed tables</li>
+                            <li class="flex items-start"><span class="text-blue-400 mr-2">→</span> CSV export functionality</li>
+                            <li class="flex items-start"><span class="text-blue-400 mr-2">→</span> Interactive hover options</li>
+                            <li class="flex items-start"><span class="text-blue-400 mr-2">→</span> Word cloud visualizations</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="insight-box mt-8">
+                    <h3 class="text-2xl font-semibold mb-4">⚙️ Technical Workflow</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="text-lg font-semibold mb-3 text-white">Execution</h4>
+                            <ul class="text-gray-300 space-y-2">
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> Operational module via <code>main.py</code></li>
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> Analytical module via <code>GUIApp.ipynb</code></li>
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> ETL pipeline automation</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold mb-3 text-white">Integration</h4>
+                            <ul class="text-gray-300 space-y-2">
+                                <li class="flex items-start"><span class="text-blue-400 mr-2">→</span> Seamless data transfer between modules</li>
+                                <li class="flex items-start"><span class="text-blue-400 mr-2">→</span> Real-time sync with operational database</li>
+                                <li class="flex items-start"><span class="text-blue-400 mr-2">→</span> Automated analytical updates</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conclusion Section -->
+            <div id="conclusion" class="content-section">
+                <h2 class="text-3xl font-bold mb-6">Conclusion</h2>
+                
+                <div class="insight-box">
+                    <h3 class="text-2xl font-semibold mb-4">📋 Project Impact</h3>
+                    <p class="text-gray-300 mb-6 leading-relaxed text-lg">
+                        From data extraction and transformation through well-architected database design to interactive operational and analytical modules, the Sales-Shipment Analysis project represents a full-cycle solution that streamlines e-commerce operations and empowers businesses with data-driven decision-making capabilities.
+                    </p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="text-lg font-semibold mb-3 text-white">Customer Benefits</h4>
+                            <div class="space-y-3">
+                                <div class="highlight-box">
+                                    <p class="text-white font-semibold mb-1">✓ Enhanced Transparency</p>
+                                    <p class="text-gray-300 text-sm">Real-time order tracking and status updates</p>
+                                </div>
+                                <div class="highlight-box">
+                                    <p class="text-white font-semibold mb-1">✓ Better Experience</p>
+                                    <p class="text-gray-300 text-sm">Personalized recommendations and easy feedback</p>
+                                </div>
+                                <div class="highlight-box">
+                                    <p class="text-white font-semibold mb-1">✓ Security</p>
+                                    <p class="text-gray-300 text-sm">Secure authentication and data protection</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-lg font-semibold mb-3 text-white">Business Benefits</h4>
+                            <div class="space-y-3">
+                                <div class="highlight-box">
+                                    <p class="text-white font-semibold mb-1">✓ Strategic Insights</p>
+                                    <p class="text-gray-300 text-sm">Deep analytical insights through dynamic dashboards</p>
+                                </div>
+                                <div class="highlight-box">
+                                    <p class="text-white font-semibold mb-1">✓ Operational Efficiency</p>
+                                    <p class="text-gray-300 text-sm">Streamlined order management and tracking</p>
+                                </div>
+                                <div class="highlight-box">
+                                    <p class="text-white font-semibold mb-1">✓ Data-Driven Decisions</p>
+                                    <p class="text-gray-300 text-sm">Historical trends and performance metrics</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="insight-box mt-8">
+                    <h3 class="text-2xl font-semibold mb-4">🚀 Future Scope</h3>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start">
+                            <span class="text-blue-400 mr-2 mt-1">→</span>
+                            <span><strong>Real-Time Data Processing:</strong> Integrating live data streams for up-to-the-minute updates</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-blue-400 mr-2 mt-1">→</span>
+                            <span><strong>Predictive Analytics:</strong> ML models to forecast trends and optimize inventory management</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-blue-400 mr-2 mt-1">→</span>
+                            <span><strong>Mobile Access:</strong> Developing mobile applications for remote access to both modules</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-blue-400 mr-2 mt-1">→</span>
+                            <span><strong>Enhanced UX:</strong> Continuously refining user interface and advanced security measures</span>
+                        </li>
+                        <li class="flex items-start">
+                            <span class="text-blue-400 mr-2 mt-1">→</span>
+                            <span><strong>Cloud Migration:</strong> Moving to cloud infrastructure for improved scalability and cost efficiency</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="insight-box mt-8">
+                    <h3 class="text-2xl font-semibold mb-4">🎓 Key Learnings & Takeaways</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="text-lg font-semibold mb-3 text-white">Technical Skills</h4>
+                            <ul class="space-y-2 text-gray-300">
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> Advanced database design and ERD modeling</li>
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> Star schema implementation for analytics</li>
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> ETL pipeline development with Python and SQL</li>
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> GUI development with PyQt5</li>
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> Interactive dashboard creation</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold mb-3 text-white">System Design</h4>
+                            <ul class="space-y-2 text-gray-300">
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> Dual-database architecture implementation</li>
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> Separation of operational and analytical concerns</li>
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> Security best practices and data governance</li>
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> End-to-end solution development</li>
+                                <li class="flex items-start"><span class="text-green-400 mr-2">→</span> User-centric design principles</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-12 text-center">
+                    <a href="Index.html" class="resource-button">
+                        ← Back to Portfolio
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all content sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab-button');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected content section
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+            
+            // Scroll to top of content
+            window.scrollTo({
+                top: 400,
+                behavior: 'smooth'
+            });
+        }
+    </script>
+</body>
+</html>
